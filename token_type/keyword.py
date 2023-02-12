@@ -11,6 +11,7 @@ keywords = {
     "BREAK": "break",
     "CONTINUE": "continue",
     "GOTO": "goto",
+    "PRINT": "print"
 }
 
 types = {
