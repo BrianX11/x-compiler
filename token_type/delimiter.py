@@ -11,7 +11,7 @@ delimiters = {
     "COMMA": ",",
     "SEMICOLON": ";",
     "COLON": ":",
-    "WHITESPACE": " ", 
+    "WHITESPACE": " ",
 }
 
 def isDelimiter(input):

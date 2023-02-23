@@ -10,6 +10,6 @@ def isString(input):
     return False
 
 def isStringStart(input):
-    if re.search(string_start, input):
+    if re.search(string_start, input) and not isString(input):
         return "String"
     return False

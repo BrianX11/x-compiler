@@ -12,56 +12,31 @@ tokens = ("", "")
 pattern = ""
 lexeme = ""
 
-while line:
-    line = source_code.readline()
-
-    pos = 0
+for line in source_code:
     temp = ""
-
-    while pos < len(line):
-
-        current = line[pos]
-
-        if not (isDelimiter(current)) and not (isDelimiter(temp)) and current != '\n':
-            temp += current
-            pos += 1
-        else:
-            if temp: 
-
-                if (isOperator(temp)) and (isOperator(current)):
+    for pos, current in enumerate(line):
+        if isDelimiter(current) or isDelimiter(temp):
+            if temp:
+                if isOperator(temp+current) or isStringStart(temp):
                     temp += current
-                    pos += 1
-                    continue
-                if isStringStart(temp) and not isString(temp):
-                    temp += current
-                    pos += 1
-                    continue
-
-                keyword = isKeyword(temp)
-                _id = isID(temp)
-                number = isNumber(temp)
-                string = isString(temp)
-                delimiter = isDelimiter(temp)
-                operator = isOperator(temp)
-
-                if keyword:
-                    print((temp, "KEYWORD", keyword))
-                elif _id:
-                    print((temp,"ID", _id))
-                elif number:
-                    print((temp,"NUMBER", number))
-                elif string:
-                    print((temp,"STRING", string))
-                elif operator:
-                    print((temp,"OPERATOR", operator))
-                elif delimiter and not temp==delimiters["WHITESPACE"]:
-                    print((temp,"DELIMITER", delimiter))
-                elif not temp==delimiters["WHITESPACE"]:
-                    print((temp, "UNKNOWN"))
-                temp = ""
+                else:
+                    token_type = (
+                        ("KEYWORD", isKeyword(temp)),
+                        ("ID", isID(temp)),
+                        ("NUMBER", isNumber(temp)),
+                        ("STRING", isString(temp)),
+                        ("OPERATOR", isOperator(temp)),
+                        ("DELIMITER", isDelimiter(temp)),
+                        ("UNKNOWN", None)
+                    )
+                    token = next((t for t in token_type if t[1]), token_type[-1])
+                    if temp != delimiters["WHITESPACE"]:
+                        print((temp, token[0], token[1]))
+                    temp = current
             else:
                 temp += current
-                pos += 1
-
+        else:
+            temp += current
+        
 
             
