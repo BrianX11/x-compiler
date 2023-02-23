@@ -26,12 +26,7 @@ while line:
             temp += current
             pos += 1
         else:
-            
- #           if(current==delimiters["WHITESPACE"]):
-#                pos+=1
-#                continue
-
-            if temp:
+            if temp: 
                 if (isOperator(temp)) and (isOperator(current)):
                     temp += current
                     pos += 1
