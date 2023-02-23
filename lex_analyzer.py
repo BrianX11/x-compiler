@@ -21,15 +21,15 @@ while line:
     while pos < len(line):
 
         current = line[pos]
-        
+
         if not (isDelimiter(current) or isOperator(current)) and not (isDelimiter(temp) or isOperator(temp)) and current != '\n':
             temp += current
             pos += 1
         else:
             
-            if(current==delimiters["WHITESPACE"]):
-                pos+=1
-                continue
+ #           if(current==delimiters["WHITESPACE"]):
+#                pos+=1
+#                continue
 
             if temp:
                 if (isOperator(temp)) and (isOperator(current)):
@@ -44,15 +44,15 @@ while line:
                 operator = isOperator(temp)
 
                 if keyword:
-                    print(("KEYWORD", keyword))
+                    print((temp, "KEYWORD", keyword))
                 elif _id:
-                    print(("ID", _id))
+                    print((temp,"ID", _id))
                 elif number:
-                    print(("NUMBER", number))
-                elif delimiter:
-                    print(("DELIMITER", delimiter))
+                    print((temp,"NUMBER", number))
+                elif delimiter and not temp==delimiters["WHITESPACE"]:
+                    print((temp,"DELIMITER", delimiter))
                 elif operator:
-                    print(("OPERATOR", operator))
+                    print((temp,"OPERATOR", operator))
                 temp = ""
             else:
                 temp += current
