@@ -9,16 +9,13 @@ delimiters = {
     "R_SQUARE_BRACKET": "]",
     "COMMA": ",",
     "SEMICOLON": ";",
-    "QUOTE": "'",
-    "DOUBLE_QUOTE": "\"",
-    "BACKSLASH": "\\",
-    "SLASH": "/",
     "COLON": ":",
-    "DOT": ".",
+    "WHITESPACE": " ", 
 }
 
 def isDelimiter(input):
     for key, value in delimiters.items():
-        if re.search("^" + value + "$", input):
+        if re.search("^" + re.escape(value) + "$", input):
             return key
     return False
+

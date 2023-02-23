@@ -7,6 +7,7 @@ arithmetic_operators = {
     "DIV": "/",
     "MOD": "%",
     "EXP": "**",
+    "ASS": "="
 }
 
 comparison_operators = {
@@ -26,6 +27,6 @@ logical_operators = {
 
 def isOperator(input):
     for key, value in {**arithmetic_operators, **comparison_operators, **logical_operators}.items():
-        if re.search("^" + value + "$", input):
+        if re.search("^" + re.escape(value)  + "$", input):
             return key
     return False
