@@ -1,4 +1,5 @@
 import re
+from token_type.operator import isOperator
 
 delimiters = {
     "L_BRACKET": "{",
@@ -15,7 +16,7 @@ delimiters = {
 
 def isDelimiter(input):
     for key, value in delimiters.items():
-        if re.search("^" + re.escape(value) + "$", input):
+        if re.search("^" + re.escape(value) + "$", input) or isOperator(input):
             return key
     return False
 

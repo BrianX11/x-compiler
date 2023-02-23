@@ -3,7 +3,7 @@ from token_type.delimiter import delimiters, isDelimiter
 from token_type.operator import isOperator
 from token_type.identification import isID
 from token_type.number import isNumber
-from token_type.string import isString
+from token_type.string import isString, isStringStart
 
 source_code = open("example.x", "r")
 line = "None"
@@ -22,12 +22,17 @@ while line:
 
         current = line[pos]
 
-        if not (isDelimiter(current) or isOperator(current)) and not (isDelimiter(temp) or isOperator(temp)) and current != '\n':
+        if not (isDelimiter(current)) and not (isDelimiter(temp)) and current != '\n':
             temp += current
             pos += 1
         else:
             if temp: 
+
                 if (isOperator(temp)) and (isOperator(current)):
+                    temp += current
+                    pos += 1
+                    continue
+                if isStringStart(temp) and not isString(temp):
                     temp += current
                     pos += 1
                     continue
@@ -35,6 +40,7 @@ while line:
                 keyword = isKeyword(temp)
                 _id = isID(temp)
                 number = isNumber(temp)
+                string = isString(temp)
                 delimiter = isDelimiter(temp)
                 operator = isOperator(temp)
 
@@ -44,10 +50,14 @@ while line:
                     print((temp,"ID", _id))
                 elif number:
                     print((temp,"NUMBER", number))
-                elif delimiter and not temp==delimiters["WHITESPACE"]:
-                    print((temp,"DELIMITER", delimiter))
+                elif string:
+                    print((temp,"STRING", string))
                 elif operator:
                     print((temp,"OPERATOR", operator))
+                elif delimiter and not temp==delimiters["WHITESPACE"]:
+                    print((temp,"DELIMITER", delimiter))
+                elif not temp==delimiters["WHITESPACE"]:
+                    print((temp, "UNKNOWN"))
                 temp = ""
             else:
                 temp += current
