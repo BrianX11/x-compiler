@@ -1,8 +1,14 @@
 import re
 
+number_pattern = r"^\d*\.?\d*$"
+
 string_pattern = r'"(.*?)"'
 string_start = r'"(.*?)+'
 
+def isNumber(input):
+    if re.search(number_pattern, input):
+        return "Number"
+    return False
 
 def isString(input):
     if re.search(string_pattern, input):

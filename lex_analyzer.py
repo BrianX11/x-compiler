@@ -2,8 +2,7 @@ from token_type.keyword import isKeyword
 from token_type.delimiter import delimiters, isDelimiter
 from token_type.operator import isOperator
 from token_type.identification import isID
-from token_type.number import isNumber
-from token_type.string import isString, isStringStart
+from token_type.type import isNumber, isString, isStringStart
 
 def parse(input):
     tokens=[]
