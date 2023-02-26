@@ -71,8 +71,8 @@ class Editor:
     
     def on_button_click(self):
         tokens = lex.parse(self.text.get("1.0", "end").splitlines())
-        for token in tokens:
-            self.highlight(token[3], token[4], token[5], token[6])
+        #for token in tokens:
+        #    self.highlight(token[3], token[4], token[5], token[6])
 
     def open_file(self):
         file_path = filedialog.askopenfilename()

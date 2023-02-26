@@ -4,6 +4,36 @@ from token_type.operator import isOperator
 from token_type.identification import isID
 from token_type.type import isNumber, isString, isStringStart
 
+class Token:
+    class Attr:
+        def __init__(self, line, start_pos, end_pos):
+            self.line = line
+            self.start_pos = start_pos
+            self.end_pos = end_pos
+
+    def __init__(self, type, token, lexeme, attributes=None):
+        self.type = type
+        self.token = token
+        self.lexeme = lexeme
+        self.attributes = attributes if attributes is not None else Token.Attr(None, None, None)
+    
+    token_type = (
+        ("KEYWORD", isKeyword),
+        ("ID", isID),
+        ("NUMBER", isNumber),
+        ("STRING", isString),
+        ("OPERATOR", isOperator),
+        ("DELIMITER", isDelimiter),
+        ("UNKNOWN", None)
+   )
+    
+    @classmethod
+    def append(cls, tokens_list, lexeme, line, start, end):
+        attributes = cls.Attr(line, start, end)
+        token_type = next((t for t in cls.token_type if t[1](lexeme)), cls.token_type[-1])
+        new_token = cls(token_type[0], token_type[1], lexeme, attributes)
+        tokens_list.append(new_token)
+
 def parse(input):
     tokens=[]
     line_n = 0
@@ -16,19 +46,8 @@ def parse(input):
                     if isOperator(temp+current) or isStringStart(temp):
                         temp += current
                     else:
-                        token_type = (
-                            ("KEYWORD", isKeyword(temp), "cyan"),
-                            ("ID", isID(temp), "yellow"),
-                            ("NUMBER", isNumber(temp), "green"),
-                            ("STRING", isString(temp), "green"),
-                            ("OPERATOR", isOperator(temp), "red"),
-                            ("DELIMITER", isDelimiter(temp), "magenta"),
-                            ("UNKNOWN", None)
-                        )
-                        token = next((t for t in token_type if t[1]), token_type[-1])
                         if temp != delimiters["WHITESPACE"]:
-                            tokens.append((temp, token[0], token[1], start, pos, line_n, token[2]))
-                            print((temp, token[0], token[1], start, pos, line_n))
+                            Token.append(tokens, temp, line_n, start, pos)
                         start = pos
                         temp = current
                 else:
