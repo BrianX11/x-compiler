@@ -31,7 +31,7 @@ class Token:
     def append(cls, tokens_list, lexeme, line, start, end):
         attributes = cls.Attr(line, start, end)
         token_type = next((t for t in cls.token_type if t[1](lexeme)), cls.token_type[-1])
-        new_token = cls(token_type[0], token_type[1], lexeme, attributes)
+        new_token = cls(token_type[0], token_type[1](lexeme), lexeme, attributes)
         tokens_list.append(new_token)
 
 def parse(input):

@@ -32,7 +32,7 @@ class Tooltip:
         self.tip.wm_overrideredirect(True)
         self.tip.wm_geometry("+%d+%d" % (x, y))
         label = tk.Label(self.tip, text=self.text, justify=tk.LEFT,
-                         background="#ffffe0", relief=tk.SOLID, borderwidth=1,
+                         background="#FFFFFF", relief=tk.SOLID, borderwidth=1,
                          font=("tahoma", "8", "normal"))
         label.pack(ipadx=1)
         Tooltip.active_tip = self
@@ -80,9 +80,9 @@ class Editor:
     def on_button_click(self):
         tokens = lex.parse(self.text.get("1.0", "end").splitlines())
         for token in tokens:
-            self.highlight_token(token.type, token.attributes.start_pos, token.attributes.end_pos, token.attributes.line)
+            self.highlight_token(token, token.attributes.start_pos, token.attributes.end_pos, token.attributes.line)
 
-    def highlight_token(self, token_type, start_position, end_position, line_number):
+    def highlight_token(self, token, start_position, end_position, line_number):
         start_index = f"{line_number+1}.{start_position}"
         end_index = f"{line_number+1}.{end_position}"
         uu = uuid.uuid4()
@@ -97,9 +97,11 @@ class Editor:
             "UNKNOWN": "#ff9aa2",
         }
 
-        tip = Tooltip(self.text, "This is a tooltip")
+        tp_message = f"TYPE:{token.type}\nTOKEN:{token.token}\nLEXEME:{token.lexeme}\nLSE:({token.attributes.line},{token.attributes.start_pos},{token.attributes.end_pos})"
+
+        tip = Tooltip(self.text, tp_message)
         self.text.tag_add(uu, start_index, end_index)
-        self.text.tag_configure(uu, background=color_type[token_type])
+        self.text.tag_configure(uu, background=color_type[token.type])
         self.text.tag_bind(uu, "<Enter>", tip.enter)
         self.text.tag_bind(uu, "<Leave>", tip.leave)
 
