@@ -68,11 +68,6 @@ class Editor:
 
         self.parse_button = ttk.Button(self.toolbar, text="Analizador Lexico", command=self.on_button_click)
         self.parse_button.pack(side="left")
-    
-    def on_button_click(self):
-        tokens = lex.parse(self.text.get("1.0", "end").splitlines())
-        #for token in tokens:
-        #    self.highlight(token[3], token[4], token[5], token[6])
 
     def open_file(self):
         file_path = filedialog.askopenfilename()
@@ -81,14 +76,30 @@ class Editor:
                 file_contents = file.read()
                 self.text.delete("1.0", "end")
                 self.text.insert("end", file_contents)
-    
-    def highlight(self, start_position, end_position, line_number, color):
+
+    def on_button_click(self):
+        tokens = lex.parse(self.text.get("1.0", "end").splitlines())
+        for token in tokens:
+            self.highlight_token(token.type, token.attributes.start_pos, token.attributes.end_pos, token.attributes.line)
+
+    def highlight_token(self, token_type, start_position, end_position, line_number):
         start_index = f"{line_number+1}.{start_position}"
         end_index = f"{line_number+1}.{end_position}"
         uu = uuid.uuid4()
+
+        color_type = {
+            "KEYWORD": "#ffb347",
+            "ID": "#90ee90",
+            "NUMBER": "#87cefa",
+            "STRING": "#87cefa",
+            "OPERATOR": "#d5a6bd",
+            "DELIMITER": "#c9c9c9",
+            "UNKNOWN": "#ff9aa2",
+        }
+
         tip = Tooltip(self.text, "This is a tooltip")
         self.text.tag_add(uu, start_index, end_index)
-        self.text.tag_configure(uu, background=color)
+        self.text.tag_configure(uu, background=color_type[token_type])
         self.text.tag_bind(uu, "<Enter>", tip.enter)
         self.text.tag_bind(uu, "<Leave>", tip.leave)
 
